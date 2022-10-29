@@ -3,18 +3,22 @@ import psycopg2
 
 def create_table(conn):
     cur.execute("""
+        DROP TABLE phone;
+        DROP TABLE client;
+        """)
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS client(
         id SERIAL PRIMARY KEY,
         first_name VARCHAR(60) NOT NULL,
         last_name VARCHAR(60) NOT NULL,
         email VARCHAR(60));
-    """)
+        """)
 
     cur.execute("""
-            CREATE TABLE IF NOT EXISTS phone(
-            id SERIAL PRIMARY KEY,
-            number VARCHAR(20) UNIQUE,
-            client_id integer references client(id));
+        CREATE TABLE IF NOT EXISTS phone(
+        id SERIAL PRIMARY KEY,
+        number VARCHAR(20) UNIQUE,
+        client_id integer references client(id));
         """)
 
     return conn.commit()
@@ -117,10 +121,6 @@ def find_client(conn):
 
 with psycopg2.connect(database="HW5", user="postgres", password="132465798") as conn:
     with conn.cursor() as cur:
-        # cur.execute("""
-        #     DROP TABLE phone;
-        #     DROP TABLE client;
-        #     """)
         # create_table(conn)
         # add_client(conn, 'Ivan', 'Ivanov', 'ii@ya.ru')
         # add_phone(conn, 5, 89211234)
